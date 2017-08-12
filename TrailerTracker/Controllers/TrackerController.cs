@@ -17,6 +17,8 @@ namespace TrailerTracker.Controllers
         [HttpGet]
         public TrackerPayload DidCheckIn(string trailerNumber)
         {
+            Helpers.trackerHelper.getAllTrailers();
+            Helpers.trackerHelper.getCheckedInTrailers();
             var esn = getESNNumber(trailerNumber);
             var trailer = GetTrailerInfo(esn);
             bool didCheckIn = trailer.lastIdReportTime >= new DateTime(2017, 1, 1);
@@ -77,7 +79,7 @@ namespace TrailerTracker.Controllers
             request.ContentType = "application/json";
             request.MediaType = "application/json";
 
-            byte[] authBytes = Encoding.UTF8.GetBytes("GeoDecisions:DCSreset17!".ToCharArray());
+            byte[] authBytes = Encoding.UTF8.GetBytes((Settings.user + ":" + Settings.pw).ToCharArray());
 
             request.Headers.Add(HttpRequestHeader.Authorization, String.Format("Basic {0}", Convert.ToBase64String(authBytes)));
 
