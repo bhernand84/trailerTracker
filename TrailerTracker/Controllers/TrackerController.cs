@@ -77,7 +77,8 @@ namespace TrailerTracker.Controllers
             request.ContentType = "application/json";
             request.MediaType = "application/json";
 
-            byte[] authBytes = Encoding.UTF8.GetBytes("GeoDecisions:DCSreset17!".ToCharArray());
+            var credentials = Settings.user + ":" + Settings.pw;
+            byte[] authBytes = Encoding.UTF8.GetBytes(credentials.ToCharArray());
 
             request.Headers.Add(HttpRequestHeader.Authorization, String.Format("Basic {0}", Convert.ToBase64String(authBytes)));
 
