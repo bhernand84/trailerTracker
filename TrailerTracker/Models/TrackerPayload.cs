@@ -2,11 +2,12 @@
 {
     public class TrackerPayload
     {
-        public bool Result { get;set;}
+        public TrailerInfo trailerInfo { get; set; }
+        public bool result { get;set;}
 
         public TrackerPayload() { }
         public TrackerPayload(bool result) {
-            Result = result;
+            this.result = result;
         }
     }
 }

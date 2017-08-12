@@ -21,6 +21,7 @@ namespace TrailerTracker.Controllers
             var trailer = GetTrailerInfo(esn);
             bool didCheckIn = trailer.lastIdReportTime >= new DateTime(2017, 1, 1);
             TrackerPayload payload = new TrackerPayload(didCheckIn);
+            payload.trailerInfo = trailer;
             return payload;
         }
         [Route("shouldOpen/{trailerNumber}")]
