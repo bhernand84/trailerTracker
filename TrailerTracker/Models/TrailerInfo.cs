@@ -6,6 +6,7 @@ namespace TrailerTracker.Models
     {
         public string esn { get; set; }
         public DateTime lastIdReportTime { get; set; }
+        public string trailerNumber { get; set; }
         public TrailerInfo()
         {
         }

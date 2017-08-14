@@ -1,0 +1,99 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <title>Trailer Tracker</title>
+	<meta charset="utf-8" />
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+</head>
+<body style="background-color: whitesmoke">
+    <h1>Trailer Tracker</h1>
+        <div>
+            <h3>(FOR USE ONLINE)</h3>
+            Is Trailer Checked In?<br/>
+            <form id="checkInForm">
+                <input type="text" id="trailerNumberCheckIn" placeholder="Trailer Number"><input type="submit" value="Submit"><br/>
+                <label id="checkInLabel"></label>
+            </form>
+        </div>
+        <br />
+        <div>
+            <h3>(FOR USE OFFLINE)</h3>
+            Should I Open Trailer?<br>
+            <form id="openForm">
+                <input type="text" id="trailerNumberOpen" placeholder="Trailer Number"><input type="submit" value="Submit"><br/>
+                <label id="openLabel"></label>
+            </form>
+        </div>
+</body>
+</html>
+
+<script>
+    var assetList;
+
+    $.ajax({
+        url: 'api/tracker/GetAllTrailers',
+        type: 'GET',
+        data: { },
+        contentType: 'application/json; charset=utf-8',
+        success: function (response) {
+            assetList = response;
+        },
+        error: function () {
+            alert("error retreiving asset list");
+        }
+    });
+    $('#checkInForm').submit(onTrailerCheckedInSubmit);
+    $('#openForm').submit(onTrailerOpenSubmit);
+
+    $('#trailerNumberCheckIn').on('focus', function () {
+        $(this).attr('autocomplete', 'off');
+    });
+
+    $('#trailerNumberOpen').on('focus', function () {
+        $(this).attr('autocomplete', 'off');
+    });
+
+    function onTrailerCheckedInSubmit(e) {
+        e.preventDefault();
+        var trailerNumb = $('#trailerNumberCheckIn').val();
+
+        $.ajax({
+            url: 'api/tracker/DidCheckIn',
+            type: 'GET',
+            data: { trailerNumber: trailerNumb },
+            contentType: 'application/json; charset=utf-8',
+            success: function (response) {
+                var trailerAsset = response.trailerInfo;
+                var trailerDate = new Date(trailerAsset.lastIdReportTime);
+                if (trailerDate >= new Date(2017, 1, 1)) {
+                    $('#checkInLabel').text("Trailer " + trailerAsset.trailerNumber + " ALREADY CHECKED IN").css("color", "green");
+                }
+                else {
+                    $('#checkInLabel').text("Trailer " + trailerAsset.trailerNumber + " NEEDS OPENING").css("color", "red");
+                }
+                $('#trailerNumberCheckIn').val("");
+            },
+            error: function () {
+                alert("error: Must have internet connection!");
+            }
+        });
+    }
+
+    function findTrailerByNumber(trailer) {
+        var trailerNumb = $('#trailerNumberOpen').val();
+        return trailer.trailerNumber == trailerNumb;
+    }
+
+    function onTrailerOpenSubmit(e) {
+        e.preventDefault();
+        var trailerAsset = assetList.find(findTrailerByNumber);
+        var trailerDate = new Date(trailerAsset.lastCheckInTime);
+        if (trailerDate >= new Date(2017, 1, 1)) {
+            $('#openLabel').text("Trailer " + trailerAsset.trailerNumber + " ALREADY CHECKED IN").css("color","green");
+        }
+        else {
+            $('#openLabel').text("Trailer " + trailerAsset.trailerNumber + " NEEDS OPENING").css("color", "red");
+        }
+        $('#trailerNumberOpen').val("");
+    }
+</script>
