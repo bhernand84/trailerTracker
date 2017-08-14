@@ -7,20 +7,19 @@ using System.Net;
 using System.Net.Http;
 using System.Text;
 using System.Web.Http;
+using TrailerTracker.Helpers;
 using TrailerTracker.Models;
 
 namespace TrailerTracker.Controllers
 {
-
     public class TrackerController : ApiController
     {
         [HttpGet]
         public TrackerPayload DidCheckIn(string trailerNumber)
         {
-            Helpers.trackerHelper.getAllTrailers();
-            Helpers.trackerHelper.getCheckedInTrailers();
             var esn = getESNNumber(trailerNumber);
             var trailer = GetTrailerInfo(esn);
+            trailer.trailerNumber = trailerNumber;
             bool didCheckIn = trailer.lastIdReportTime >= new DateTime(2017, 1, 1);
             TrackerPayload payload = new TrackerPayload(didCheckIn);
             payload.trailerInfo = trailer;
@@ -30,13 +29,25 @@ namespace TrailerTracker.Controllers
         [HttpGet]
         public TrackerPayload ShouldOpen(int trailerNumber)
         {
+
             TrackerPayload payload = new TrackerPayload();
             return payload;
         }
 
+        public List<TrailerAsset> GetAllTrailers()
+        {
+            var assetList = Helpers.trackerHelper.getAllTrailers();
+            return assetList;
+        }
+
         protected string getESNNumber(string trailerNumber)
         {
-            return "4642045738";
+            //take trailer number and get ESN number from assetList
+            var assetList = Helpers.trackerHelper.getAllTrailers();
+            var trailer = assetList.FirstOrDefault(m => m.trailerNumber == trailerNumber);
+            if (trailer == null)
+                return null;
+            return trailer.esn;
         }
 
         protected TrailerInfo GetTrailerInfo(string esn)
