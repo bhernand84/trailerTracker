@@ -100,7 +100,8 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config" />
-    <Content Include="Data\pulsData8-12-2017.csv" />
+    <Content Include="Data\assetList.csv" />
+    <Content Include="Data\pulsData.csv" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

@@ -16,6 +16,8 @@
             </form>
         </div>
         <br />
+        <br />
+        <br />
         <div>
             <h3>(FOR USE OFFLINE)</h3>
             Should I Open Trailer?<br>
@@ -55,7 +57,7 @@
 
     function onTrailerCheckedInSubmit(e) {
         e.preventDefault();
-        var trailerNumb = $('#trailerNumberCheckIn').val();
+        var trailerNumb = $('#trailerNumberCheckIn').val().toUpperCase();
 
         $.ajax({
             url: 'api/tracker/DidCheckIn',
@@ -69,7 +71,7 @@
                     $('#checkInLabel').text("Trailer " + trailerAsset.trailerNumber + " ALREADY CHECKED IN").css("color", "green");
                 }
                 else {
-                    $('#checkInLabel').text("Trailer " + trailerAsset.trailerNumber + " NEEDS OPENING").css("color", "red");
+                    $('#checkInLabel').text("Trailer " + trailerAsset.trailerNumber + " HAS NOT CHECKED IN").css("color", "red");
                 }
                 $('#trailerNumberCheckIn').val("");
             },
@@ -80,7 +82,7 @@
     }
 
     function findTrailerByNumber(trailer) {
-        var trailerNumb = $('#trailerNumberOpen').val();
+        var trailerNumb = $('#trailerNumberOpen').val().toUpperCase();
         return trailer.trailerNumber == trailerNumb;
     }
 
@@ -89,7 +91,7 @@
         var trailerAsset = assetList.find(findTrailerByNumber);
         var trailerDate = new Date(trailerAsset.lastCheckInTime);
         if (trailerDate >= new Date(2017, 1, 1)) {
-            $('#openLabel').text("Trailer " + trailerAsset.trailerNumber + " ALREADY CHECKED IN").css("color","green");
+            $('#openLabel').text("Trailer " + trailerAsset.trailerNumber + " DOES NOT NEED OPENING").css("color","green");
         }
         else {
             $('#openLabel').text("Trailer " + trailerAsset.trailerNumber + " NEEDS OPENING").css("color", "red");

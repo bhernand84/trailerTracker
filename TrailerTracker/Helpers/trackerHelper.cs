@@ -86,7 +86,7 @@ namespace TrailerTracker.Helpers
                     trailerPULS.lastCheckInTime = DateTime.Parse(fields[indexOfLastUpdated]);
                 }
 
-                if (trailerPULS.lastCheckInTime != null && trailerPULS.lastCheckInTime >= new DateTime(2017,1,1))
+                if (trailerPULS.lastCheckInTime != null && (trailerPULS.lastCheckInTime >= new DateTime(2017,1,1) && trailerPULS.lastCheckInTime <= new DateTime(2015,1,1)))
                 {
                     checkedInTrailers.Add(trailerPULS);
                 }
