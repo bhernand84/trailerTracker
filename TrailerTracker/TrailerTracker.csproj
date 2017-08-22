@@ -102,6 +102,10 @@
     <Content Include="packages.config" />
     <Content Include="Data\assetList.csv" />
     <Content Include="Data\pulsData.csv" />
+<<<<<<< HEAD
+=======
+    <None Include="Properties\PublishProfiles\trailerchecker - Web Deploy.pubxml" />
+>>>>>>> 4931d9ae0bef386abac9f4930322d4e6b5604f4f
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
